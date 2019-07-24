@@ -95,12 +95,19 @@ public class AreaFragment extends Fragment {
                 }else if (currentLevel == LEVEL_CITY){
                     selectedCity = cityList.get(position);
                     queryCounties();
-                }else if (currentLevel == Level_COUNTY){
+                }else if (currentLevel == Level_COUNTY) {
                     String weatherId = countyList.get(position).getWeatherId();
-                    Intent intent = new Intent(getActivity(),WeatherAcitvity.class);
-                    intent.putExtra("weather_id",weatherId);
-                    startActivity(intent);
-                    getActivity().finish();
+                    if (getActivity() instanceof MainActivity) {
+                        Intent intent = new Intent(getActivity(), WeatherAcitvity.class);
+                        intent.putExtra("weather_id", weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else if (getActivity() instanceof WeatherAcitvity){
+                        WeatherAcitvity acitvity = (WeatherAcitvity)getActivity();
+                        acitvity.drawerLayout.closeDrawers();
+                        acitvity.swipeRefresh.setRefreshing(true);
+                        acitvity.requestWeather(weatherId);
+                    }
                 }
             }
         });
